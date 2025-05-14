@@ -8,9 +8,7 @@ Du lernst:
 
 ---
 
-## 🧰 Vorbereitung
-
-Lege folgende Klassenstruktur an:
+## 🧰 Vorbereitung (gleich wie im Coding Lab)
 
 ```java
 class Tier {
@@ -36,7 +34,7 @@ class Katze extends Tier {
 
 ---
 
-## 🧩 **Übung 1: Kovarianz (`? extends`)**
+## 🧩 **Lösung zu Übung 1: Kovarianz (`? extends`)**
 
 ```java
 public static void gibTierLaute(List<? extends Tier> tiere) {
@@ -44,16 +42,21 @@ public static void gibTierLaute(List<? extends Tier> tiere) {
         t.gibLaut();
     }
 }
+
+// Anwendung:
+List<Hund> hunde = Arrays.asList(new Hund(), new Hund());
+List<Katze> katzen = Arrays.asList(new Katze(), new Katze());
+
+gibTierLaute(hunde);
+gibTierLaute(katzen);
 ```
 
-### Aufgaben:
-1. Erstelle eine `List<Hund>` und eine `List<Katze>`.
-2. Übergib beide Listen an `gibTierLaute(...)`.
-3. Erkläre, warum man in der Methode keine Elemente zur Liste hinzufügen darf.
+❗ **Warum kein Hinzufügen erlaubt ist:**  
+Weil der Compiler nicht weiß, ob die Liste z. B. `List<Hund>` oder `List<Katze>` ist – daher darf man keine `Tier`-Objekte hinzufügen (Typunsicherheit).
 
 ---
 
-## 🧩 **Übung 2: Kontravarianz (`? super`)**
+## 🧩 **Lösung zu Übung 2: Kontravarianz (`? super`)**
 
 ```java
 public static void fuegeHundHinzu(List<? super Hund> liste) {
@@ -61,13 +64,34 @@ public static void fuegeHundHinzu(List<? super Hund> liste) {
 }
 ```
 
-### Aufgaben:
-1. Übergib eine `List<Tier>` an `fuegeHundHinzu(...)`.
-2. Was passiert, wenn du `List<Hund>` oder `List<Object>` übergibst?
-3. Warum kannst du keine Elemente aus `liste` zurückgeben als `Hund`?
+### Anwendung:
+
+```java
+List<Tier> tiere = new ArrayList<>();
+List<Object> objekte = new ArrayList<>();
+
+fuegeHundHinzu(tiere);
+fuegeHundHinzu(objekte);
+```
+
+❗ **Warum kein sicheres Zurückgeben möglich ist:**  
+Man weiß nicht, welcher Typ in der Liste gespeichert ist → Rückgabe als `Object`, nicht als `Hund`.
 
 ---
 
-## ✅ Bonusidee
+## ✅ Bonusidee: `? super Tier`
 
-- Schreibe eine Methode, die mit `<? super Tier>` arbeitet und sowohl `Tier`, `Hund`, als auch `Object` akzeptiert.
+```java
+public static void akzeptiereTiere(List<? super Tier> liste) {
+    liste.add(new Hund());
+    liste.add(new Katze());
+    // Rückgabe nur als Object möglich
+}
+```
+
+### Anwendung:
+
+```java
+List<Object> objekte = new ArrayList<>();
+akzeptiereTiere(objekte);
+```
